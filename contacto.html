@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" >
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    background-color: #F4F4F4;
+}
+header nav {
+    background-color: #333;
+    color: white;
+    width: 100%;
+    padding: 20px;
+    text-align: center;
+    position: fixed;
+}
+
+header nav a {
+    color: white;
+    margin-right: 30px;
+    text-decoration: none;
+}
+footer {
+    text-align: center;
+    padding: 3px;
+    background-color: #333;
+    color: white;
+    bottom: 0;
+    width: 100%;
+}
+.container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: white;
+    }
+        
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        #map {
+            width: 100%;
+            height: 400px;
+            margin-top: 20px;
+        }
+        .info {
+            margin-top: 20px;
+        }
+        .error {
+            color: red;
+            font-size: 0.9em;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .contact-info {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <p style=
+    "text-align: right;"> <b>CONTACTO</b></p>
+    <header>
+        <nav>
+            <a href="index.html">Inicio</a>
+            <a href="galeria.html">Galería</a>
+            <a href="presupuesto.html">Presupuesto</a>
+            <a href="contacto.html">Contacto</a>
+        </nav>
+
+    </header>
+
+<div class="container">
+    <h1>contacto</h1>
+
+    <div class="contact-info">
+        <h2>Datos de Contacto</h2>
+        <p><strong>Nombre de la Empresa:</strong> Biel Puig Currius.S.L.</p>
+        <p><strong>Teléfono:</strong> +34 686 538 859</p>
+        <p><strong>Correo Electrónico:</strong> bipu2005@gmail.com</p>
+        <p><strong>Dirección:</strong> Carrer de Provença, 112B, 114, Eixample, 08029 Barcelona</p>
+    </div>
+
+    <div class="info">
+        <h2>Calcula la Ruta hacia nuestro Negocio</h2>
+
+        <label for="latitud">Introduce tu latitud:</label>
+        <input type="number" id="latitud" placeholder="Latitud" step="any" required>
+
+        <label for="longitud">Introduce tu longitud:</label>
+        <input type="number" id="longitud" placeholder="Longitud" step="any" required>
+
+        <button id="calcularRuta">Calcular Ruta</button>
+        <p class="error" id="errorMensaje"></p>
+    </div>
+
+    <div id="map"></div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+<script>
+    const negocioLat = 41.385263533811724; 
+    const negocioLng = 2.1490315454301463; 
+
+    const map = L.map('map').setView([negocioLat, negocioLng], 13);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    const negocioMarker = L.marker([negocioLat, negocioLng]).addTo(map)
+        .bindPopup('Mi Negocio').openPopup();
+
+    document.getElementById('calcularRuta').addEventListener('click', function() {
+        const latitudCliente = parseFloat(document.getElementById('latitud').value);
+        const longitudCliente = parseFloat(document.getElementById('longitud').value);
+        const errorMensaje = document.getElementById('errorMensaje');
+
+        if (isNaN(latitudCliente) || isNaN(longitudCliente)) {
+            errorMensaje.textContent = "Por favor, introduce una latitud y longitud válidas.";
+            return;
+        } else {
+            errorMensaje.textContent = "";
+        }
+
+        if (window.clienteMarker) {
+            map.removeLayer(window.clienteMarker);
+        }
+
+        window.clienteMarker = L.marker([latitudCliente, longitudCliente]).addTo(map)
+            .bindPopup('Ubicación del Cliente').openPopup();
+
+        const bounds = L.latLngBounds(
+            [negocioLat, negocioLng], // Ubicación del negocio
+            [latitudCliente, longitudCliente]  // Ubicación del cliente
+        );
+        map.fitBounds(bounds);
+    });
+</script>
+<footer>
+    <p> Puig.S.L. Todos los derechos reservados.</p>
+    <a href="https://x.com/TvIntelige39289tps://twitter.com" target="_blank">TWITTERX 
+        <img src="images/twitterx.png" alt="twitterx" class="logo-twitterx"></a>
+    <a href="https://www.instagram.com/bbielp" target="_blank">INSTAGRAM
+        <img src="images/instagram.png" alt="Instagram" class="logo-instagram"></a>
+</footer>
+
+</body>
+</html>
